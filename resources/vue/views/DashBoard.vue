@@ -1,14 +1,15 @@
 <template>
-    <ui5-page id="dashboard-page" background-design="List" style="height: 100vh;">
+    <ui5-page
+        id="dashboard-page"
+        background-design="List"
+        style="height: 100vh"
+    >
         <div
             class="fd-margin-top-bottom--tiny fd-has-display-flex fd-has-align-items-center"
             style="justify-content: space-between"
         >
             <div class="fd-has-display-flex">
-                <VSLabel
-                    class="fd-margin-end--tiny"
-                    show-colon=""
-                >
+                <VSLabel class="fd-margin-end--tiny" show-colon="">
                     جمع ساعت کاری
                 </VSLabel>
                 <VSLabel>{{ myTotal }}</VSLabel>
@@ -24,6 +25,15 @@
                     @click="enterNewCheckIn"
                 >
                     ثبت ورود
+                </VSButton>
+                <VSButton
+                    class="fd-margin-end--tiny"
+                    :disabled="!preventEnteringCheckOut"
+                    design="Negative"
+                    tooltip=" logout"
+                    @click="logout"
+                >
+                    logOut
                 </VSButton>
 
                 <VSButton
@@ -57,13 +67,8 @@
             </div>
         </div>
 
-        <ui5-table
-            sticky-column-header
-            no-data-text="داده‌ای موجود نیست!"
-        >
-            <ui5-table-column slot="columns">
-                ردیف
-            </ui5-table-column>
+        <ui5-table sticky-column-header no-data-text="داده‌ای موجود نیست!">
+            <ui5-table-column slot="columns"> ردیف </ui5-table-column>
             <ui5-table-column
                 slot="columns"
                 demand-popin
@@ -80,9 +85,7 @@
             >
                 خروج
             </ui5-table-column>
-            <ui5-table-column slot="columns">
-                نتیجه
-            </ui5-table-column>
+            <ui5-table-column slot="columns"> نتیجه </ui5-table-column>
             <ui5-table-column
                 slot="columns"
                 demand-popin
@@ -93,15 +96,10 @@
                 عملیات
             </ui5-table-column>
 
-            <ui5-table-row
-                v-for="record of records"
-                :key="record.id"
-            >
+            <ui5-table-row v-for="record of records" :key="record.id">
+                <ui5-table-cell> 1 </ui5-table-cell>
                 <ui5-table-cell>
-                    1
-                </ui5-table-cell>
-                <ui5-table-cell>
-                    {{ getDayName(record.checkIn, 'fa-IR') }}
+                    {{ getDayName(record.checkIn, "fa-IR") }}
                     -
                     {{ getDate(record.checkIn) }}
                     -
@@ -109,17 +107,22 @@
                 </ui5-table-cell>
                 <ui5-table-cell>
                     <template v-if="record.checkOut !== undefined">
-                        {{ getDayName(record.checkOut, 'fa-IR')}}
+                        {{ getDayName(record.checkOut, "fa-IR") }}
                         -
                         {{ getDate(record.checkOut) }}
                         -
                         {{ getTime(record.checkOut) }}
                     </template>
-                    <template v-else>
-                        ---
-                    </template>
+                    <template v-else> --- </template>
                 </ui5-table-cell>
-                <ui5-table-cell>{{ record.checkOut !== undefined ? calculateTimeDifference(record.checkIn, record.checkOut) : '---' }}</ui5-table-cell>
+                <ui5-table-cell>{{
+                    record.checkOut !== undefined
+                        ? calculateTimeDifference(
+                              record.checkIn,
+                              record.checkOut
+                          )
+                        : "---"
+                }}</ui5-table-cell>
                 <ui5-table-cell class="fd-has-display-flex">
                     <VSButton
                         class="fd-margin-end--tiny"
@@ -148,9 +151,7 @@
         header-text="ثبت تردد"
     >
         <div slot="header">
-            <ui5-title level="H4">
-                ثبت تردد
-            </ui5-title>
+            <ui5-title level="H4"> ثبت تردد </ui5-title>
         </div>
         <div
             slot="header"
@@ -202,7 +203,7 @@
         <div
             slot="footer"
             class="fd-has-display-flex fd-has-align-items-center fd-margin-top-bottom--tiny"
-            style="justify-content: end; width: 100%;"
+            style="justify-content: end; width: 100%"
         >
             <ui5-button
                 id="save-record-button"
@@ -221,9 +222,7 @@
         header-text="ویرایش تردد"
     >
         <div slot="header">
-            <ui5-title level="H4">
-                ویرایش تردد
-            </ui5-title>
+            <ui5-title level="H4"> ویرایش تردد </ui5-title>
         </div>
         <div
             slot="header"
@@ -275,7 +274,7 @@
         <div
             slot="footer"
             class="fd-has-display-flex fd-has-align-items-center fd-margin-top-bottom--tiny"
-            style="justify-content: end; width: 100%;"
+            style="justify-content: end; width: 100%"
         >
             <ui5-button
                 id="edit-record-button"
@@ -297,7 +296,7 @@
         <div
             slot="footer"
             class="fd-has-display-flex fd-has-align-items-center"
-            style="justify-content: end; width: 100%;"
+            style="justify-content: end; width: 100%"
         >
             <ui5-button
                 id="error-close"
@@ -315,16 +314,13 @@
     >
         <p>
             آیا از حذف رکورد روز
-            <span
-                id="to-be-deleted-record"
-                class="fd-margin-begin-end--tiny"
-            />
+            <span id="to-be-deleted-record" class="fd-margin-begin-end--tiny" />
             مطمئن هستید؟
         </p>
         <div
             slot="footer"
             class="fd-has-display-flex fd-has-align-items-center"
-            style="justify-content: end; width: 100%;"
+            style="justify-content: end; width: 100%"
         >
             <ui5-button
                 class="fd-margin-end--tiny"
@@ -344,15 +340,9 @@
         </div>
     </ui5-dialog>
 
-    <ui5-dialog
-        id="settings-dialog"
-        icon="decline"
-        header-text="تنظیمات"
-    >
+    <ui5-dialog id="settings-dialog" icon="decline" header-text="تنظیمات">
         <div slot="header">
-            <ui5-title level="H4">
-                تنظیمات
-            </ui5-title>
+            <ui5-title level="H4"> تنظیمات </ui5-title>
         </div>
         <div
             slot="header"
@@ -367,11 +357,7 @@
             />
         </div>
 
-        <ui5-label
-            id="themes-label"
-            for="theme-options"
-            show-colon=""
-        >
+        <ui5-label id="themes-label" for="theme-options" show-colon="">
             پوسته پنل
         </ui5-label>
         <div>
@@ -392,11 +378,7 @@
             </ui5-select>
         </div>
 
-        <ui5-label
-            id="densities-label"
-            for="density-options"
-            show-colon=""
-        >
+        <ui5-label id="densities-label" for="density-options" show-colon="">
             اندازه پنل
         </ui5-label>
         <div>
@@ -406,96 +388,91 @@
                 accessible-name-ref="densities-label"
                 @change="handleContentDensitySwitchChange"
             >
-                <ui5-option data-density="regular">
-                    معمولی
-                </ui5-option>
-                <ui5-option data-density="compact">
-                    کوچک
-                </ui5-option>
+                <ui5-option data-density="regular"> معمولی </ui5-option>
+                <ui5-option data-density="compact"> کوچک </ui5-option>
             </ui5-select>
         </div>
     </ui5-dialog>
 </template>
 
 <script setup>
-
-import '@ui5/webcomponents/dist/Select';
-import '@ui5/webcomponents/dist/Table';
-import '@ui5/webcomponents/dist/TableColumn';
-import '@ui5/webcomponents/dist/TableRow';
-import '@ui5/webcomponents/dist/TableCell';
-import '@ui5/webcomponents/dist/DateTimePicker';
-import '@ui5/webcomponents-fiori/dist/Page';
-import '@ui5/webcomponents-localization/dist/features/calendar/Persian';
-import { computed, onMounted, ref } from 'vue';
-import { setTheme, getTheme } from '@ui5/webcomponents-base/dist/config/Theme';
-import Pasoonate from 'pasoonate';
-import VSButton from '../components/SAP-UI5/VSButton.vue';
-import VSLabel from '../components/SAP-UI5/VSLabel.vue';
+import "@ui5/webcomponents/dist/Select";
+import "@ui5/webcomponents/dist/Table";
+import "@ui5/webcomponents/dist/TableColumn";
+import "@ui5/webcomponents/dist/TableRow";
+import "@ui5/webcomponents/dist/TableCell";
+import "@ui5/webcomponents/dist/DateTimePicker";
+import "@ui5/webcomponents-fiori/dist/Page";
+import "@ui5/webcomponents-localization/dist/features/calendar/Persian";
+import { computed, onMounted, ref } from "vue";
+import { setTheme, getTheme } from "@ui5/webcomponents-base/dist/config/Theme";
+import Pasoonate from "pasoonate";
+import VSButton from "../components/SAP-UI5/VSButton.vue";
+import VSLabel from "../components/SAP-UI5/VSLabel.vue";
 
 const selectedTheme = ref(getTheme());
 const themes = [
     {
-        key: 'sap_fiori_3',
-        additional_text: 'روشن',
-        label: 'Quartz Light',
+        key: "sap_fiori_3",
+        additional_text: "روشن",
+        label: "Quartz Light",
     },
     {
-        key: 'sap_fiori_3_dark',
-        additional_text: 'تیره',
-        label: 'Quartz Dark',
+        key: "sap_fiori_3_dark",
+        additional_text: "تیره",
+        label: "Quartz Dark",
     },
     {
-        key: 'sap_horizon',
-        additional_text: 'روشن',
-        label: 'Morning Horizon',
+        key: "sap_horizon",
+        additional_text: "روشن",
+        label: "Morning Horizon",
     },
     {
-        key: 'sap_horizon_dark',
-        additional_text: 'تیره',
-        label: 'Evening Horizon',
+        key: "sap_horizon_dark",
+        additional_text: "تیره",
+        label: "Evening Horizon",
     },
     {
-        key: 'sap_horizon_hcb',
-        additional_text: 'تیره',
-        label: 'High Contrast Black',
+        key: "sap_horizon_hcb",
+        additional_text: "تیره",
+        label: "High Contrast Black",
     },
     {
-        key: 'sap_horizon_hcw',
-        additional_text: 'روشن',
-        label: 'High Contrast White',
+        key: "sap_horizon_hcw",
+        additional_text: "روشن",
+        label: "High Contrast White",
     },
     {
-        key: 'sap_fiori_3_hcb',
-        additional_text: 'تیره',
-        label: 'Quartz High Contrast Black',
+        key: "sap_fiori_3_hcb",
+        additional_text: "تیره",
+        label: "Quartz High Contrast Black",
     },
     {
-        key: 'sap_fiori_3_hcw',
-        additional_text: 'روشن',
-        label: 'Quartz High Contrast White',
+        key: "sap_fiori_3_hcw",
+        additional_text: "روشن",
+        label: "Quartz High Contrast White",
     },
     {
-        key: 'sap_belize',
-        additional_text: 'روشن',
-        label: 'Belize',
+        key: "sap_belize",
+        additional_text: "روشن",
+        label: "Belize",
     },
     {
-        key: 'sap_belize_hcb',
-        additional_text: 'تیره',
-        label: 'Belize High Contrast Black',
+        key: "sap_belize_hcb",
+        additional_text: "تیره",
+        label: "Belize High Contrast Black",
     },
     {
-        key: 'sap_belize_hcw',
-        additional_text: 'روشن',
-        label: 'Belize High Contrast White',
+        key: "sap_belize_hcw",
+        additional_text: "روشن",
+        label: "Belize High Contrast White",
     },
 ];
 
 /**
  * @type []
  */
-const localRecords = JSON.parse(localStorage.getItem('my_records'));
+const localRecords = JSON.parse(localStorage.getItem("my_records"));
 
 const records = ref(localRecords !== null ? localRecords : []);
 
@@ -519,15 +496,15 @@ function closeDialogById(dialogId) {
 function getDate(timestamp) {
     const date = new Date(timestamp * 1000);
 
-    return date.toLocaleDateString('fa-IR');
+    return date.toLocaleDateString("fa-IR");
 }
 
 function getTime(timestamp) {
     const date = new Date(timestamp * 1000);
 
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
 
     return `${hours}:${minutes}:${seconds}`;
 }
@@ -535,9 +512,13 @@ function getTime(timestamp) {
 function calculateTimeDifference(checkInTimestamp, checkOutTimestamp) {
     const difference = checkOutTimestamp - checkInTimestamp;
 
-    const hours = Math.floor(difference / 3600).toString().padStart(2, '0');
-    const minutes = (Math.floor(difference / 60) % 60).toString().padStart(2, '0');
-    const seconds = (difference % 60).toString().padStart(2, '0');
+    const hours = Math.floor(difference / 3600)
+        .toString()
+        .padStart(2, "0");
+    const minutes = (Math.floor(difference / 60) % 60)
+        .toString()
+        .padStart(2, "0");
+    const seconds = (difference % 60).toString().padStart(2, "0");
 
     return `${hours}:${minutes}:${seconds}`;
 }
@@ -550,31 +531,42 @@ function enterNewCheckIn() {
         checkIn: Math.floor(Date.now() / 1000),
     });
 
-    localStorage.setItem('my_records', JSON.stringify(records.value));
+    localStorage.setItem("my_records", JSON.stringify(records.value));
 }
 
 function enterNewCheckOut() {
     preventEnteringCheckOut.value = true;
 
-    records.value[records.value.length - 1].checkOut = Math.floor(Date.now() / 1000);
+    records.value[records.value.length - 1].checkOut = Math.floor(
+        Date.now() / 1000
+    );
 
-    localStorage.setItem('my_records', JSON.stringify(records.value));
+    localStorage.setItem("my_records", JSON.stringify(records.value));
 }
 
 function getDayName(timestamp, locale) {
-    return (new Date(timestamp * 1000)).toLocaleDateString(locale, { weekday: 'long' });
+    return new Date(timestamp * 1000).toLocaleDateString(locale, {
+        weekday: "long",
+    });
 }
 
 function sortRecords(unsortedRecords) {
-    return unsortedRecords.sort((firstRecord, secondRecord) => firstRecord.checkIn > secondRecord.checkIn);
+    return unsortedRecords.sort(
+        (firstRecord, secondRecord) =>
+            firstRecord.checkIn > secondRecord.checkIn
+    );
 }
 
 function saveRecord() {
-    const checkInTimestamp = Pasoonate.make().jalali(document.getElementById('check-in-datetime').value).getTimestamp();
-    const checkOutTimestamp = Pasoonate.make().jalali(document.getElementById('check-out-datetime').value).getTimestamp();
+    const checkInTimestamp = Pasoonate.make()
+        .jalali(document.getElementById("check-in-datetime").value)
+        .getTimestamp();
+    const checkOutTimestamp = Pasoonate.make()
+        .jalali(document.getElementById("check-out-datetime").value)
+        .getTimestamp();
 
     if (checkOutTimestamp < checkInTimestamp) {
-        showDialogById('error-state-dialog');
+        showDialogById("error-state-dialog");
 
         return;
     }
@@ -587,9 +579,9 @@ function saveRecord() {
 
     records.value = sortRecords(records.value);
 
-    localStorage.setItem('my_records', JSON.stringify(records.value));
+    localStorage.setItem("my_records", JSON.stringify(records.value));
 
-    closeDialogById('add-new-record-dialog');
+    closeDialogById("add-new-record-dialog");
 }
 
 function findRecordById(recordId) {
@@ -605,7 +597,7 @@ function findRecordById(recordId) {
     });
 
     if (result === undefined) {
-        return 'not found';
+        return "not found";
     }
 
     return result;
@@ -614,47 +606,66 @@ function findRecordById(recordId) {
 function handleEditRecord(event) {
     const foundRecord = findRecordById(+event.target.dataset.recordId);
 
-    document.getElementById('edit-check-in-datetime').value = Pasoonate.make(foundRecord.record.checkIn).jalali().format('yyyy-MM-dd HH:mm:ss');
-    document.getElementById('edit-check-out-datetime').value = Pasoonate.make(foundRecord.record.checkOut).jalali().format('yyyy-MM-dd HH:mm:ss');
-    document.getElementById('edit-record-button').dataset.recordIndex = foundRecord.index;
+    document.getElementById("edit-check-in-datetime").value = Pasoonate.make(
+        foundRecord.record.checkIn
+    )
+        .jalali()
+        .format("yyyy-MM-dd HH:mm:ss");
+    document.getElementById("edit-check-out-datetime").value = Pasoonate.make(
+        foundRecord.record.checkOut
+    )
+        .jalali()
+        .format("yyyy-MM-dd HH:mm:ss");
+    document.getElementById("edit-record-button").dataset.recordIndex =
+        foundRecord.index;
 
-    showDialogById('edit-record-dialog');
+    showDialogById("edit-record-dialog");
 }
 
 function handleRemoveRecord(event) {
     const foundRecord = findRecordById(+event.target.dataset.recordId);
 
-    document.getElementById('to-be-deleted-record').textContent = Pasoonate.make(foundRecord.record.checkIn).jalali().format('yyyy-MM-dd HH:mm:ss');
+    document.getElementById("to-be-deleted-record").textContent =
+        Pasoonate.make(foundRecord.record.checkIn)
+            .jalali()
+            .format("yyyy-MM-dd HH:mm:ss");
 
-    document.getElementById('remove-record-button').dataset.recordIndex = foundRecord.index;
+    document.getElementById("remove-record-button").dataset.recordIndex =
+        foundRecord.index;
 
-    showDialogById('ask-to-remove-record-dialog');
+    showDialogById("ask-to-remove-record-dialog");
 }
 
 function removeRecord(event) {
     records.value.slice(+event.target.dataset.recordIndex, 1);
 
-    localStorage.setItem('my_records', JSON.stringify(records.value));
+    localStorage.setItem("my_records", JSON.stringify(records.value));
 }
 
 function editRecord(event) {
-    const editedCheckInTimestamp = Pasoonate.make().jalali(document.getElementById('edit-check-in-datetime').value).getTimestamp();
-    const editedCheckOutTimestamp = Pasoonate.make().jalali(document.getElementById('edit-check-out-datetime').value).getTimestamp();
+    const editedCheckInTimestamp = Pasoonate.make()
+        .jalali(document.getElementById("edit-check-in-datetime").value)
+        .getTimestamp();
+    const editedCheckOutTimestamp = Pasoonate.make()
+        .jalali(document.getElementById("edit-check-out-datetime").value)
+        .getTimestamp();
 
     if (editedCheckOutTimestamp < editedCheckInTimestamp) {
-        showDialogById('error-state-dialog');
+        showDialogById("error-state-dialog");
 
         return;
     }
 
-    records.value[event.target.dataset.recordIndex].checkIn = editedCheckInTimestamp;
-    records.value[event.target.dataset.recordIndex].checkOut = editedCheckOutTimestamp;
+    records.value[event.target.dataset.recordIndex].checkIn =
+        editedCheckInTimestamp;
+    records.value[event.target.dataset.recordIndex].checkOut =
+        editedCheckOutTimestamp;
 
     records.value = sortRecords(records.value);
 
-    localStorage.setItem('my_records', JSON.stringify(records.value));
+    localStorage.setItem("my_records", JSON.stringify(records.value));
 
-    closeDialogById('edit-record-dialog');
+    closeDialogById("edit-record-dialog");
 }
 
 const myTotal = computed(function () {
@@ -663,12 +674,16 @@ const myTotal = computed(function () {
             return sumOfDifference;
         }
 
-        return sumOfDifference + (currentRecord.checkOut - currentRecord.checkIn);
+        return (
+            sumOfDifference + (currentRecord.checkOut - currentRecord.checkIn)
+        );
     }, 0);
 
-    const hours = Math.floor(total / 3600).toString().padStart(2, '0');
-    const minutes = (Math.floor(total / 60) % 60).toString().padStart(2, '0');
-    const seconds = (total % 60).toString().padStart(2, '0');
+    const hours = Math.floor(total / 3600)
+        .toString()
+        .padStart(2, "0");
+    const minutes = (Math.floor(total / 60) % 60).toString().padStart(2, "0");
+    const seconds = (total % 60).toString().padStart(2, "0");
 
     return `${hours}:${minutes}:${seconds}`;
 });
@@ -679,15 +694,48 @@ function handleThemeChange(event) {
 }
 
 function handleContentDensitySwitchChange(event) {
-    if (event.detail.selectedOption.dataset.density === 'compact') {
-        document.body.setAttribute('data-ui5-compact-size', '');
-    } else if (event.detail.selectedOption.dataset.density === 'regular') {
-        document.body.removeAttribute('data-ui5-compact-size');
+    if (event.detail.selectedOption.dataset.density === "compact") {
+        document.body.setAttribute("data-ui5-compact-size", "");
+    } else if (event.detail.selectedOption.dataset.density === "regular") {
+        document.body.removeAttribute("data-ui5-compact-size");
     }
 }
 
 onMounted(function () {
-    document.querySelector("[data-theme=" + selectedTheme.value + "]").selected = true;
-})
+    document.querySelector(
+        "[data-theme=" + selectedTheme.value + "]"
+    ).selected = true;
+});
 
+import axios from "axios";
+
+function logout() {
+    axios
+        .get("/logout")
+        .then((response) => {
+            console.log("you logout successfully");
+            this.$router.push("/login");
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+// export default {
+//     methods: {
+//         logout() {
+//             axios.get("/sanctum/csrf-cookie").then((response) => {
+//                 axios
+//                     .get("/logout")
+//                     .then((response) => {
+//                         console.log("you logout successfully");
+//                         this.$router.push("/login");
+//                     })
+//                     .catch((error) => {
+//                         console.log(error);
+//                     });
+//             });
+//         },
+//     },
+// };
 </script>
