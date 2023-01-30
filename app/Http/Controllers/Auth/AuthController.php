@@ -103,6 +103,7 @@ class AuthController extends Controller
     {
         auth()->user()->tokens()->delete();
 
+
         return [
             'message' => 'Tokens Revoked'
         ];
