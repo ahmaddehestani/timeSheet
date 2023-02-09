@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\WorkspaceController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,12 +18,8 @@ use App\Http\Controllers\Auth\AuthController;
 */
 
 
-Route::post('/register', [AuthController::class, "signup"]);
-Route::post('/login', [AuthController::class, "login"]);
-Route::put('/forgetPass', [AuthController::class, "forgetPass"]);
-Route::get('/logout', [AuthController::class, "logout"]);
-
 
 Route::get('{any}', function () {
     return view('app');
+
 })->where('any', '.*');

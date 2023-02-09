@@ -1,9 +1,14 @@
-import { createApp } from "vue";
-import { setLanguage } from "@ui5/webcomponents-base/dist/config/Language";
-import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme";
+import {createApp} from "vue";
+
 import App from "../vue/App.vue";
-import router from "./router/index";
+
+// Plugins
+import router from "./router/index"
+import i18n from './plugins/vue-i18n'
 import axios from "axios";
+
+import {setLanguage} from "@ui5/webcomponents-base/dist/config/Language";
+import {setTheme} from "@ui5/webcomponents-base/dist/config/Theme";
 
 // Assets
 import "@ui5/webcomponents/dist/Assets";
@@ -17,6 +22,10 @@ import "fundamental-styles/dist/margins.css";
 // Icons
 import "@ui5/webcomponents-icons/dist/AllIcons";
 
-setLanguage("fa");
+import 'bootstrap/dist/js/bootstrap.min'
 
-createApp(App).use(router).mount("#app");
+
+createApp(App)
+    .use(router)
+    .use(i18n)
+    .mount("#app");

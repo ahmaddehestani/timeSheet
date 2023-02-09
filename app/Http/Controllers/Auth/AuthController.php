@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 use PhpParser\Node\Expr\FuncCall;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +21,9 @@ class AuthController extends Controller
         $request->validate([
             "full_name" => ["required", 'min:4', 'max:63'],
             "email" => ["required", "email:rfc"],
-            "password" =>  ["required", 'min:8', 'max:32'],
+            "password" => ["required", 'min:8', 'max:32'],
             // same:password
-            "user_name" => ["required", 'alpha_num', 'min:6', 'max:63'],
+            "user_name" => ["required", 'min:4', 'max:63'],
         ]);
         $user = new User;
         $user->email = $request->email;
@@ -40,20 +42,36 @@ class AuthController extends Controller
     public function login(Request $request)
 
     {
+        $request->validate([
+            "email" => ["required", "email:rfc"],
+            "password" => ["required"],
+
+        ]);
+
+        $key = 'token_key';
+
         $email = $request->email;
         $user = User::where('email', $email)->first();
-        error_log($user->password);
-        error_log($request->password);
+
+//
         if ($user) {
-            $hash_password = Hash::make($request->password);
-            error_log($hash_password);
-            // if (Hash::check($user->password, $request->password)) {
+            $payload = [
+                'user_id' => $user->id,
+                'user_name' => $user->user_name,
+                'disabled' => $user->disabled,
+                'is_admin' => $user->is_admin,
+
+            ];
+
+            $jwt = JWT::encode($payload, $key, 'HS256');
+//
             if (Auth::attempt($request->only(['email', 'password']))) {
-                $token = auth()->user()->createToken('API TOKEN')->plainTextToken;
+//
                 return response()->json([
-                    'status' => true,
+
                     'message' => 'User Logged In Successfully',
-                    'token' => $token
+                    'token' => $jwt,
+                    'user' => $user->full_name
                 ], 200);
             }
         }
@@ -61,30 +79,14 @@ class AuthController extends Controller
         return response()->json("email or password is wrong", 400);
 
 
-        // $request->validate([
-        //     'email' => 'required|email',
-        //     'password' => 'required',
-        //     'device_name' => 'required',
-        // ]);
-
-        // $user = User::where('email', $request->email)->first();
-
-        // if (!$user || !Hash::check($request->password, $user->password)) {
-        //     throw ValidationException::withMessages([
-        //         'email' => ['The provided credentials are incorrect.'],
-        //     ]);
-        // }
-
-        // return $user->createToken($request->device_name)->plainTextToken;
     }
-
 
 
     public function forgetPass(Request $request)
     {
 
         $request->validate([
-            "password" =>  ["required", 'min:8', 'max:32']
+            "password" => ["required", 'min:8', 'max:32']
         ]);
         $email = $request->email;
         $user = User::where('email', $email)->first();

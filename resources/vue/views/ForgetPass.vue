@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row justify-content-center w-50 m-auto">
+        <div class="row justify-content-center w-50 m-auto mt-5">
             <div class="col-ml-4">
                 <div class="card">
                     <div class="card-header text-center">Change Password</div>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group">
                             <label for="confirm_password"
-                                >confirm_password</label
+                                >confirm password</label
                             >
                             <input
                                 type="password"
@@ -37,13 +37,17 @@
 
                         <div class="form-group">
                             <router-link class="float-right" to="/register"
-                                >register</router-link
+                                >CREATE ACCOUNT</router-link
                             >
+                            </div>
+                        <div class="form-group">
                             <router-link class="float-right" to="/login"
-                                >login</router-link
+                                >LOGIN</router-link
                             >
+                            </div>
+                        <div class="form-group text-center">
                             <button
-                                class="btn btn-primary"
+                                class="btn btn-primary "
                                 @click.prevent="changePass_handler"
                             >
                                 Change Password
@@ -72,10 +76,10 @@ export default {
         changePass_handler() {
             axios.get("/sanctum/csrf-cookie").then((response) => {
                 axios
-                    .put("/forgetPass", this.formData)
+                    .put('/api/forgetPass', this.formData)
                     .then((response) => {
-                        console.log("your pass change successful");
-                        this.$router.push("/login");
+                        console.log('your pass change successful');
+                        this.$router.push({ name: 'login' });
                     })
                     .catch((error) => {
                         console.log(error);

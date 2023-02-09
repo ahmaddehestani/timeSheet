@@ -1,38 +1,52 @@
 <template>
     <div>
-        <div class="row justify-content-center w-50 m-auto">
+        <div class="row justify-content-center w-50 m-auto mt-5">
             <div class="col-ml-4">
                 <div class="card">
-                    <div class="card-header text-center">Login</div>
+                    <div class="card-header text-center">
+                        Login
+                    </div>
                     <div class="card-body">
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input
+                                v-model="formData.email"
                                 type="text"
                                 class="form-control"
                                 name="email"
-                                v-model="formData.email"
-                            />
+                            >
+                            <p class="text-danger mt-1" v-text="errors.email"></p>
                         </div>
                         <div class="form-group">
                             <label for="password">password</label>
                             <input
+                                v-model="formData.password"
                                 type="password"
                                 class="form-control"
                                 name="password"
-                                v-model="formData.password"
-                            />
+                            >
+                            <p class="text-danger mt-1" v-text="errors.password"></p>
                         </div>
 
-                        <div class="form-group">
-                            <router-link class="float-right" to="/register"
-                                >register</router-link
+                        <div class="form-group ">
+                            <router-link
+                                class="float-right"
+                                to="/register"
                             >
-                            <router-link class="float-right" to="/forgetPass"
-                                >forget password</router-link
+                                CREATE ACCOUNT
+                            </router-link>
+                            </div>
+                            <div class="form-group ">
+                            <router-link
+                                class="float-left"
+                                to="/forgetPass"
                             >
+                                FORGET PASSWORD
+                            </router-link>
+                            </div>
+                            <div class="form-group text-center">
                             <button
-                                class="btn btn-primary"
+                                class="btn btn-primary text-center"
                                 @click.prevent="login_handler"
                             >
                                 login
@@ -46,27 +60,31 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+
 export default {
     data() {
         return {
             formData: {
-                email: "",
-                password: "",
+                email: '',
+                password: '',
             },
+            errors: {},
         };
     },
     methods: {
         login_handler() {
-            axios.get("/sanctum/csrf-cookie").then((response) => {
+            axios.get('/sanctum/csrf-cookie').then((response) => {
                 axios
-                    .post("/login", this.formData)
+                    .post('/api/login', this.formData)
                     .then((response) => {
-                        console.log("you log in success");
-                        this.$router.push("/");
+                        localStorage.setItem("token",response.data.token);
+
+                        this.$router.push({ name: 'dashboard' });
                     })
-                    .catch((error) => {
-                        console.log(error);
+                    .catch((errors) => {
+                        this.errors = errors.response.data.errors;
+                        console.log(errors);
                     });
             });
         },

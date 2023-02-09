@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('workSpace_id');
+            $table->unsignedBigInteger('workspace_id');
             $table->char('title', 64);
             $table->time('enter_time');
             $table->time('max_enter_time')->nullable();
