@@ -4,11 +4,11 @@
             <div class="col-ml-4">
                 <div class="card">
                     <div class="card-header text-center">
-                        Login
+                       {{ $t('login form') }}
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email"> {{ $t('email') }}</label>
                             <input
                                 v-model="formData.email"
                                 type="text"
@@ -18,7 +18,7 @@
                             <p class="text-danger mt-1" v-text="errors.email"></p>
                         </div>
                         <div class="form-group">
-                            <label for="password">password</label>
+                            <label for="password"> {{ $t('password') }}</label>
                             <input
                                 v-model="formData.password"
                                 type="password"
@@ -33,7 +33,7 @@
                                 class="float-right"
                                 to="/register"
                             >
-                                CREATE ACCOUNT
+                                {{ $t('register') }}
                             </router-link>
                             </div>
                             <div class="form-group ">
@@ -41,7 +41,7 @@
                                 class="float-left"
                                 to="/forgetPass"
                             >
-                                FORGET PASSWORD
+                                {{ $t('forget password') }}
                             </router-link>
                             </div>
                             <div class="form-group text-center">
@@ -49,7 +49,7 @@
                                 class="btn btn-primary text-center"
                                 @click.prevent="login_handler"
                             >
-                                login
+                                {{ $t('login') }}
                             </button>
                         </div>
                     </div>

@@ -4,11 +4,12 @@
             <div class="col-ml-4">
                 <div class="card">
                     <div class="card-header text-center">
-                        Create WorkSpace
+                        {{$t('create workspace')}}
+
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="name"> Workspace Name</label>
+                            <label for="name">  {{$t('workspace name')}}</label>
                             <input
                                 v-model="formData.name"
                                 type="text"
@@ -24,7 +25,7 @@
                                 class="float-right"
                                 to="/workspaces"
                             >
-                                Workspaces list
+                                {{$t('workspace list')}}
                             </router-link>
                         </div>
 
@@ -33,7 +34,7 @@
                                 class="btn btn-primary text-center"
                                 @click.prevent="create_handler"
                             >
-                                Create
+                                {{$t('create')}}
                             </button>
                         </div>
                     </div>

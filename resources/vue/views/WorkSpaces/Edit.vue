@@ -4,11 +4,11 @@
             <div class="col-ml-4">
                 <div class="card">
                     <div class="card-header text-center">
-                        Workspace Edit
+                        {{$t('edit workspace')}}
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="name"> Workspace Name</label>
+                            <label for="name"> {{$t('workspace name')}}</label>
                             <input
                                 v-model="formData.name"
                                 type="text"
@@ -23,7 +23,7 @@
                                 class="btn btn-primary text-center"
                                 @click.prevent="edit_handler"
                             >
-                                EDIT
+                                {{$t('edit')}}
                             </button>
                         </div>
                     </div>

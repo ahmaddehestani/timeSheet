@@ -1,19 +1,18 @@
 <template>
 
-
     <div class="container mt-5">
 
         <table class="table table-striped table-bordered">
             <thead>
-            <tr>
-                <th>id</th>
-                <th>create by</th>
-                <th>name</th>
-                <th>action</th>
+            <tr class="text-center">
+                <th> {{ $t('id') }}</th>
+                <th> {{ $t('create by') }}</th>
+                <th> {{ $t('workspace name') }}</th>
+                <th> {{ $t('action') }}</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="list in lists" :key="list.id">
+            <tr class="text-center" v-for="list in lists" :key="list.id">
                 <td>{{ list.id }}</td>
                 <td>{{ list.user.full_name }}</td>
                 <td>{{ list.name }}</td>
@@ -22,7 +21,7 @@
                         class="btn btn-danger text-center"
                         @click.prevent="edit_handler(list.id)"
                     >
-                        edit
+                        {{ $t('edit') }}
                     </button>
                 </td>
             </tr>
@@ -32,11 +31,10 @@
 </template>
 
 <script>
-import axios from "axios";
 
+import axios from 'axios';
 
 export default {
-
 
     data() {
         return {
@@ -50,7 +48,7 @@ export default {
         };
     },
     created() {
-        this.formData.token = localStorage.getItem("token");
+        this.formData.token = localStorage.getItem('token');
         if (this.formData.token) {
             console.log(this.formData.token)
             this.show_list();
@@ -65,11 +63,7 @@ export default {
                 axios
                     .post('/api/workspaces', this.formData)
                     .then((response) => {
-
-
                         this.lists = response.data;
-
-
                     })
                     .catch((error) => {
                         console.log(error);
@@ -78,10 +72,10 @@ export default {
         },
         edit_handler($id) {
             this.$router.push({name: 'editWorkspace', params: {id: $id}});
-        }
+        },
     },
 
-}
+};
 
 </script>
 
